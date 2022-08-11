@@ -9,7 +9,9 @@ import { Router } from '@angular/router';
 })
 export class TestComponent implements OnInit {
 
-  constructor(private router:Router) { }
+  constructor(private router:Router) {
+    console.log("inside constructor of TestComponent")
+   }
 
   public testForm=new FormGroup({
     name:new FormControl(""),
@@ -17,6 +19,7 @@ export class TestComponent implements OnInit {
   })
 
   ngOnInit(): void {
+    console.log("Inside ngOnInit of TestComponent")
   }
 
   exit(){

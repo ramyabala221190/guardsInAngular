@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ModAModule } from './mod-a/mod-a.module';
+import { ResolverAService } from './resolver-a.service';
 import { RouteDeactiveGuard } from './route-deactive.guard';
 import { TestComponent } from './test/test.component';
 import { Test2Component } from './test2/test2.component';
@@ -16,7 +17,10 @@ const routes: Routes = [
     path:'test2',
     component:Test2Component,
     canActivate:[RouteDeactiveGuard],
-    canDeactivate:[RouteDeactiveGuard]
+    canDeactivate:[RouteDeactiveGuard],
+    resolve:{
+      todo:ResolverAService
+    }
   }
 ];
 

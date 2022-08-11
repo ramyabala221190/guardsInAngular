@@ -7,6 +7,7 @@ import { TestComponent } from './test/test.component';
 import{ReactiveFormsModule,
   FormsModule} from '@angular/forms';
 import { Test2Component } from './test2/test2.component';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { Test2Component } from './test2/test2.component';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

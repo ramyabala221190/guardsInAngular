@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-test2',
@@ -8,7 +9,9 @@ import { FormGroup, FormControl } from '@angular/forms';
 })
 export class Test2Component implements OnInit {
 
-  constructor() { }
+  constructor(private activeRoute:ActivatedRoute) {
+    console.log("inside constructor of Test2Component")
+  }
 
   public test2Form=new FormGroup({
     name:new FormControl(""),
@@ -16,6 +19,13 @@ export class Test2Component implements OnInit {
   })
 
   ngOnInit(): void {
+    console.log("Inside ngOnInit of Tes2Component");
+    this.activeRoute.data.subscribe((result:any)=>{
+      console.log(result.todo);
+    },
+    err=>{
+      console.log(err)
+    })
   }
 
   exit(){
