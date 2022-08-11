@@ -8,11 +8,13 @@ import{ReactiveFormsModule,
   FormsModule} from '@angular/forms';
 import { Test2Component } from './test2/test2.component';
 import {HttpClientModule} from '@angular/common/http';
+import { Test3Component } from './test3/test3.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    Test2Component
+    Test2Component,
+    Test3Component
   ],
   imports: [
     BrowserModule,

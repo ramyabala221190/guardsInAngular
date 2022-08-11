@@ -29,6 +29,10 @@ export class TestComponent implements OnInit {
     return confirm("Data is not saved. Are you sure you want to exit?")
   }
 
+  navigate(){
+    this.router.navigate(['/test3']);
+  }
+
 
   ngOnDestroy(){
 

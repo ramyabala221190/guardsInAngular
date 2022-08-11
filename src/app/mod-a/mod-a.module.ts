@@ -9,7 +9,7 @@ const routes:Routes=[
   {
     path:"",
     component:TestComponent,
-    canActivate:[RouteDeactiveGuard],
+    canActivateChild:[RouteDeactiveGuard],
     canDeactivate:[RouteDeactiveGuard]
   }
 ]

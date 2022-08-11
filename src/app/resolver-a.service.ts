@@ -8,9 +8,12 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 })
 export class ResolverAService implements Resolve<any> {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient) {
+
+   }
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):Observable<any> {
-    return this.http.get('https://jsonplaceholder.typicode.com/todos/500').pipe(
+    console.log("executing resolver for component");
+    return this.http.get('https://jsonplaceholder.typicode.com/todos/5').pipe(
       map(x=>x),
       catchError(err=>throwError(err))
     )
