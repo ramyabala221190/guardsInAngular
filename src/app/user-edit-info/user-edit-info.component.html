@@ -1,0 +1,16 @@
+<div class="alert alert-danger" *ngIf="errObsv$|async as errorMessage">{{errorMessage}}</div>
+
+
+<form class="form-group" [formGroup]="userEditForm" *ngIf="userDetail$ |async">
+
+  <label class="col-md-4">ID:</label><input class="form-control col-md-8" formControlName="id">
+
+  <label class="col-md-4">Name:</label><input class="form-control col-md-8" placeholder="name" formControlName="name">
+
+  <label class="col-md-4">Email:</label><input class="form-control col-md-8" placeholder="email" formControlName="email">
+
+  <button [disabled]="!userEditForm.valid" class="btn btn-success" *ngIf="userId !==0" (click)="editUser()">Update</button>
+  <button [disabled]="!userEditForm.valid" class="btn btn-success" *ngIf="userId ===0" (click)="createUser()">Create</button>
+  <button class="btn btn-light" [routerLink]="['/user']">Back</button>
+
+</form>

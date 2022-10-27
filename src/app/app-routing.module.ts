@@ -1,30 +1,23 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ModAModule } from './mod-a/mod-a.module';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ResolverAService } from './resolver-a.service';
 import { RouteDeactiveGuard } from './route-deactive.guard';
-import { TestComponent } from './test/test.component';
-import { Test2Component } from './test2/test2.component';
-import { Test3Component } from './test3/test3.component';
 
 const routes: Routes = [
+  //you always start with more specific routes and then progress towards less specific ones
   {
-    path:'test',
+    path:'user',
     loadChildren:()=>import('./mod-a/mod-a.module').then(m=>ModAModule),
-    canLoad:[RouteDeactiveGuard],
-    canActivate:[RouteDeactiveGuard]
+    // canLoad:[RouteDeactiveGuard],
+    // canActivate:[RouteDeactiveGuard]
   },
-  {
-    path:'test2',
-    component:Test2Component,
-    canActivate:[RouteDeactiveGuard],
-    canDeactivate:[RouteDeactiveGuard],
-    resolve:{
-      todo:ResolverAService
-    }},
     {
-      path:'test3',
-      component:Test3Component
+      path:'',redirectTo:'user',pathMatch:'full' //default path
+    },
+    {
+      path:'**',component:PageNotFoundComponent //wildcard path
     }
 
 ];

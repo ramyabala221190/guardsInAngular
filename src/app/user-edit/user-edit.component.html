@@ -1,0 +1,19 @@
+
+<div class="card-body">
+    <div class="wizard">
+      <!--using relative path to access child route. Using absolute path
+      is difficult because the path becomes long-->
+      <a [routerLink]="['info']"
+         routerLinkActive="active">
+        Basic Information
+      </a>
+      <a [routerLink]="['tags']"
+         routerLinkActive="active">
+        Search Tags
+      </a>
+    </div>
+  <router-outlet></router-outlet>
+  </div>
+
+
+

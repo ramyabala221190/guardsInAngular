@@ -1,0 +1,14 @@
+
+<h4>{{title}}</h4>
+
+<table class="table table-borderless">
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+  </tr>
+  <tr *ngFor="let user of userList$ |async">
+    <td><a href="#" [routerLink]="['/user',user.id]">{{user.id}}</a></td>
+    <td>{{user.name}}</td>
+  </tr>
+</table>
+
