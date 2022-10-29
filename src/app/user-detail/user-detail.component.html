@@ -16,4 +16,15 @@
   </tr>
 </table>
 
-<button class="btn btn-light" [routerLink]="['/user']">Back</button>
+<button class="btn btn-light" [routerLink]="['/']">Back</button>
+
+<!--
+For the Edit button we cannot use relative path. Why?
+Clicking on the Edit button ,we expect to navigate to the UserEditComponent : /user/edit/10
+The current active route is /user/10
+"edit/:id" is the sibling path of ":id" and not child path of ":id".
+So if we give [routerLink]="['edit',user.id]", it will try to navigate to /user/10/edit/10 which
+does not exist.
+So in this scenario we go for absolute path.
+In case of absolute path, the router will start looking from the root of the application.
+-->

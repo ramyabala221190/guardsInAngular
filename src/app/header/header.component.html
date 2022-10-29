@@ -7,12 +7,19 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/user']">Users List</a>
+          <a class="nav-link" [routerLink]="['/']"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact:true}"
+          >User List</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/user/edit',0]">Add User</a>
+          <a class="nav-link" [routerLink]="['/user/edit',0]" routerLinkActive="active">Add User</a>
         </li>
       </ul>
     </div>
   </div>
 </nav>
+
+<!--
+  Header component has no path. We cannot give an relative paths here. We need to go for absolute paths.
+-->

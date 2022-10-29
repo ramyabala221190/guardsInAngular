@@ -11,6 +11,14 @@
 
   <button [disabled]="!userEditForm.valid" class="btn btn-success" *ngIf="userId !==0" (click)="editUser()">Update</button>
   <button [disabled]="!userEditForm.valid" class="btn btn-success" *ngIf="userId ===0" (click)="createUser()">Create</button>
-  <button class="btn btn-light" [routerLink]="['/user']">Back</button>
+  <button class="btn btn-light" [routerLink]="['/']">Back</button>
 
+  <!--
+    When you are in this component the url will be localhost:4200/user/edit/10/info
+
+    When I click on Back button, I expect to go back to UsersListComponent, whose url is localhost:4200/user.
+
+    "user" path is not a child path of the current url. So we have just given "/".
+    Router will look for the path from the root of the application.
+  -->
 </form>

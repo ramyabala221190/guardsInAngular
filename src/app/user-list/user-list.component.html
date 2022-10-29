@@ -7,7 +7,15 @@
     <th>Email</th>
   </tr>
   <tr *ngFor="let user of userList$ |async">
-    <td><a href="#" [routerLink]="['/user',user.id]">{{user.id}}</a></td>
+    <td><a href="#" [routerLink]="[user.id]">{{user.id}}</a></td>
+    <!--
+   When you are in UserListComponent, the url will be localhost:4200/user
+   When you specify a path without / it is a relative path and the router begins to look for the new path
+   in the children of the current activated route.
+
+   So we know that the parent path "user" does have a child path ":id" which takes us to UserDetailComponent.
+   All we need to do is add the id inside the routerLink.
+    -->
     <td>{{user.name}}</td>
   </tr>
 </table>

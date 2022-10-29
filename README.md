@@ -54,9 +54,10 @@ When you are building the code during deployment, the base path will change from
 what does it mean base href="."
 
 -----------------------------------------------------------------------------
+Route Parameters
 
+Syntax:
 [routerLink]="['/welcome']" OR routerLink="/welcome"
-
 In the first method, we can specify the route parameters as well after the path. In the 2nd method, we can specify only the path.
 
 Activating route with code can be done using Router's navigate() method
@@ -77,15 +78,18 @@ Route parameters
 If you are doing the navigation using navigate(), then it will be similar to routerLink
 this.router.navigate(['/products',this.product.id,'edit']);
 
-
+-------------------------------------------------------------------------------
 Reading the route data: Use the ActivatedRoute
 
 2 ways to read route parameters:
 
-Using snapshot: this.route.snapshot.paramMap.get('id')   //this just gives the initial value of the param
+1. Using snapshot of ActivatedRoute: 
+this.route.snapshot.paramMap.get('id')   
+//this just gives the initial value of the param and not the values on update
 
 //this gives the updated value of the param each time it changes
-Using observable:this.route.paramMap.subscribe(params=>{
+2. Using observable of Activated route:
+this.route.paramMap.subscribe(params=>{
 console.log(params.get('id'));
 })
 
@@ -93,59 +97,61 @@ When is the observable approach useful?
 
 When i am editing an existing product or adding a new product, the component used is the same.
 What changes is the route parameters. For a new product it is 0 and for an existing product it is anything other than 0.
-
 If I switch from Edit existing product to Add new product, the component will not be re-initialised because just route parameters have changed.
-
 If we have defined the route data reading logic inside the ngOnInit, it wont be executed again.
 ngOnInit(){
 const productId=this.route.snapshot.paramMap.get('id') ;
 }
-
 Thus although the browser url changes the route param from eg: 5 to 0 to add a new product, the component view has not changed.
-Here the observable approach is required to detect the latest change in param value if you are not navigating to a new component and just
-re-navigating to the same component with different params.
-
+Here the observable approach is required to detect the latest change in param value if you are not navigating to a new component and just re-navigating to the same component with different params.
+-----------------------------------------------------------------------------------
 Optional Route Parameters
 
-These route params will not appear in the router module config.
-
+These route params will not appear in the routes object which we pass to RouterModule. What we add in the routes object are required params.
 You can add them in the routerLink or the navigate().
 
 [routerLink]="['/products',{name:productName,code:productCode}]"
 
-name and code are the optional params. In the url it will be seperated by semicolons like this: /products;name=abc;code=50cd
+name and code are the optional params. In the url it will be seperated by semicolons like this: 
+/products;name=abc;code=50cd
 
 Optional params must always be specified after the required route params.
-
 Reading optional params is same as how you read required params.
 
+-------------------------------------------------------------------------------------
 Query route params
-These are not a part of the route config just like optional params.
+These are not a part of the routes object which we pass to RouterModule just like optional params.
+
+You can add them in the routerLink or the navigate().
 
 [routerLink]="['/products',product.id]" [queryParams]="{filterBy:"ey",showImage:true}"
 
 this.router.navigate(['/products',this.product.id],{queryParams:{filterBy:"ey",showImage:true}});
 
-By default the query params are lost when we navigate away from the component which required the query params.
+By default the query params are lost when we navigate away from the component to which we passed
+the query params as a part of the route.
 
-Say I navigate from A to B with the route containing the query params. When I navigate from B to another C, by default, the query params
-will be lost and not visible in the url. To retain it, you need to add queryParamsHandling property in the routerLink or navigate() of
+Say I navigate to B with the route containing the query params. When I navigate from B to another C, by default, the query params will be lost and not visible in the url . 
+To retain it, you need to add queryParamsHandling property in the routerLink or navigate() of
 component C( not B).
+This means that if the previous route had query params, on navigation to component C it wont be lost.
+It will be retained the url.
 
-How do you retain it? Using queryParamsHandling in the component where we will navigate to and we require the query params to visible.
-So query params are useful when you want to retain the same data between 2routes.
+How do you retain it? Using queryParamsHandling in the component C.
+
+So query params are useful when you want to retain the same data between 2 routes.
 
 [routerLink]="['/products']" queryParamsHandling="preserve"
 
 this.router.navigate(['/products'],{queryParamsHandling:'preserve'});
 
-
 Reading query parameters using snapshot and observable.
 Using snapshot :this.route.snapshot.queryParamMap.get('filterBy');
 
 -------------------------------------------------------------------------------------------------------
-You can pass data to a component via the route's data property. This is useful for passing static data i.e data
-that wont change for the lifetime of the application.
+Data property:
+
+You can pass data to a component via the route's data property. This is useful for passing static data i.e data that wont change for the lifetime of the application.
 
  {
     path:"",
@@ -155,20 +161,24 @@ that wont change for the lifetime of the application.
 
 Access it in the component like this using ActivatedRoute.
 this.title=this.route.snapshot.data['pageTitle'];
--------------------------------------------------
+--------------------------------------------------------------------------------
 Resolvers-for prefetching data for a component.
 
 Component will be activated only after the resolver fetches the data.
 Route resolver is created as an angular service that implements the Resolve interface
 You can add multiple resolve services for a route.
 
-----------------------------------------------------
+--------------------------------------------------------------------------------
 Child Routes
 
 Child routes can be activated by placing another <router-outlet></router-outlet> inside the parent component.
 This is the secondary outlet.The one in the AppComponent is the primary one.
 
 The moment the path begins with / it is an absolute path. There will be no / in relative path.
+
+If the first segment begins with /, the router looks up the route from the root of the app.
+
+If the first segment begins with ./, or doesn't begin with a slash, the router looks in the children of the current activated route.
 
 [routerLink]="['info']" is the relative path
 
@@ -177,18 +187,97 @@ You need to get the value of userId from ActivatedRoute
 
 this.router.navigate(['/user','edit',this.userId,'info']) is the absolute path
 
-this.router.navigate(['info],{relativeTo:this.route}) is the relative path. this.route refers to ActivatedRoute
+this.router.navigate(['info],{relativeTo:this.route}) is the relative path. 
+this.route refers to ActivatedRoute
 
 How to access the parent component's resolver data in the child component? 
 this.route.parent.data.subscribe(x=>{})
+--------------------------------------------------------------------------------------
 
+Grouping routes under a component less parent route
 
+Advantages:
+1. Better organisation
+2. Sharing guards and resolvers
+3. Lazy load all the feature routes
 
+RouterModule.forChild({
+  path:'products',
+  children:[
+    {
+path:"",
+component:ProductListComponent  //default path
+    },
+    {
+path:":id",
+component:ProductDetailComponent
+    },
+    {
+      path:":id/edit",
+component:ProductEditComponent,
+children:[]
+    }
+  ]
+})
 
+The advantage of having a parent route with no component i.e products path is that the child routes
+of this product path will be placed inside the primary router-outlet and there is no need for a
+secondary router-outlet.
 
+-------------------------------------------------------------------------------
+Styling Routes
 
+routerLinkActive attribute will add classes to the element that hosts the attribute
+to highlight the activated route.
+When the route is inactive, the classes are removed.
 
+routerLinkActive="active" means the active class is added when the route is activated.
 
+active is a class defined in the css file.
 
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['user']"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact:true}"
+          >User List</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/user/edit',0,'info']" routerLinkActive="active">Add User</a>
+        </li>
+      </ul>
 
+In the above case both routes have user in them and If I click on Add User, even User List will
+show was active.
+To avoid that ,we add  [routerLinkActiveOptions]="{exact:true}" to do exact path matching before
+adding css class.
+
+-----------------------------------------------------------------------------
+Animating Route Transitions
+
+1. Import the BrowserAnimationsModule
+2. Define the desired animations
+3. Register the animation with a component
+4. Trigger the animation from the router-outlet
+----------------------------------------------------------------------------
+Routing Events
+
+1. NavigationStart => This is triggered when navigation begins.
+2. RoutesRecognized => When the router has found a valid path in the configuration.
+3. NavigationEnd => When navigation ends successfully.
+4. NavigationCancel => When navigation is cancelled by a routing guard or a redirect.
+5. NavigationError => When navigation fails.
+
+We can watch these events when we add the object {enableTracing:true} to the RouterModule.forRoot() like
+below:
+RouterModule.forRoot(routes,{enableTracing:true})
+----------------------------------------------------------------------------
+Reacting to Routing Events
+
+We subscribe to this.router.events to use the events in our code.
+
+We are using this to show a spinner when the navigation starts and hide when navigation ends/cancels/errors
+out.
+
+Instead of spinner, I have just added   <span>Navigating .....</span>
 
