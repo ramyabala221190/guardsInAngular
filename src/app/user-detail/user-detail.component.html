@@ -11,12 +11,12 @@
     <td>{{user.id}}</td>
     <td>{{user.name}}</td>
     <td>{{user.email}}</td>
-    <td><button type="button" class="btn btn-primary" [routerLink]="['/user/edit',user.id]">Edit</button></td>
+    <td><button type="button" class="btn btn-primary" [routerLink]="['/user/list/edit',user.id]">Edit</button></td>
     <td><button type="button" class="btn btn-danger" (click)="deleteUser(user.id)">Delete</button></td>
   </tr>
 </table>
 
-<button class="btn btn-light" [routerLink]="['/']">Back</button>
+<button class="btn btn-light" [routerLink]="['/user']">Back</button>
 
 <!--
 For the Edit button we cannot use relative path. Why?

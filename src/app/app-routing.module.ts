@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LoginComponent } from './login/login.component';
+import { MessageComponent } from './message/message.component';
+import { MessageModule } from './message/message.module';
 import { ModAModule } from './mod-a/mod-a.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ResolverAService } from './resolver-a.service';
@@ -10,8 +13,16 @@ const routes: Routes = [
   {
     path:'user',
     loadChildren:()=>import('./mod-a/mod-a.module').then(m=>ModAModule),
-    // canLoad:[RouteDeactiveGuard],
-    // canActivate:[RouteDeactiveGuard]
+    canLoad:[RouteDeactiveGuard],
+  },
+  {
+  path:'login',
+component:LoginComponent
+  },
+  {
+   path:'message',
+   loadChildren:()=>import('./message/message.module').then(m=>MessageModule),
+   outlet:'popup'
   },
     {
       path:'',redirectTo:'user',pathMatch:'full' //default path
@@ -23,7 +34,9 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes,{enableTracing:true})],
+  imports: [RouterModule.forRoot(routes,
+    //{enableTracing:true}
+    )],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

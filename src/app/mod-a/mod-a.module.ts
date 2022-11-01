@@ -13,41 +13,46 @@ import { UserEditTagsComponent } from '../user-edit-tags/user-edit-tags.componen
 
 const routes:Routes=[
   {
-    path:"",
-    component:UserListComponent,
-    data:{pageTitle:"User List"}
+    path:"list",
+    canActivate:[RouteDeactiveGuard],
+    children:[
+      {
+        path:"",
+        component:UserListComponent,
+        data:{pageTitle:"User List"}
+      },
+      {
+        path:":id",
+        component:UserDetailComponent,
+        data:{pageTitle:"User Detail"},
+        resolve:{userData:ResolverAService}
+        /*
+    You can add multiple resolver services as key value pairs.
+    resolve:{data1:service1,data2:service2,.....datan:servicen}
+        */
+      },
+      {
+       path:"edit/:id",
+       component:UserEditComponent,
+      resolve:{userData:ResolverAService},
+      children:[
+        {
+          path:"info",
+          component:UserEditInfoComponent,
+          canDeactivate:[RouteDeactiveGuard],
+        },
+        {
+        path:"tags",
+        component:UserEditTagsComponent
+        },
+        {
+          path:"",redirectTo:"info",pathMatch:"full" //this is to ensure that the info path is activate by default
+        }
+      ]
+      }
+    ]
   },
-  {
-    path:":id",
-    component:UserDetailComponent,
-    data:{pageTitle:"User Detail"},
-    resolve:{userData:ResolverAService}
-    /*
-You can add multiple resolver services as key value pairs.
-resolve:{data1:service1,data2:service2,.....datan:servicen}
-    */
-  },
-  {
-   path:"edit/:id",
-   component:UserEditComponent,
-  //  canActivateChild:[RouteDeactiveGuard],
-  //  canDeactivate:[RouteDeactiveGuard],
-  resolve:{userData:ResolverAService},
-  children:[
-    {
-      path:"info",
-      component:UserEditInfoComponent,
-    },
-    {
-    path:"tags",
-    component:UserEditTagsComponent
-    },
-    {
-      path:"",redirectTo:"info",pathMatch:"full" //this is to ensure that the info path is activate by default
-    }
-  ]
-  }
-
+  {path:"",redirectTo:"list",pathMatch:"full"}
 ]
 
 @NgModule({

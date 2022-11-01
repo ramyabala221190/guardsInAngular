@@ -1,0 +1,12 @@
+<h3>Login</h3>
+
+<form class="form-group" [formGroup]="loginForm">
+
+  <label class="col-md-4">UserName:</label><input type="text" class="form-control col-md-8" formControlName="name">
+
+  <label class="col-md-4">Password:</label><input type="password" class="form-control col-md-8" placeholder="password" formControlName="password">
+
+  <button [disabled]="!loginForm.valid" class="btn btn-success" (click)="login()">Create</button>
+  <button class="btn btn-light" [routerLink]="['/user']">Back</button>
+
+</form>

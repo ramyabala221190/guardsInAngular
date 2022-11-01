@@ -281,3 +281,75 @@ out.
 
 Instead of spinner, I have just added   <span>Navigating .....</span>
 
+-----------------------------------------------------------------------------
+Secondary/Auxillary/Sibling Routes
+
+Primary routes ---> Primary Router outlet or primary child router outlet based on route heirarchy.
+Secondary routes ----> Secondary Router outlet.
+
+These secondary routes will be placed in a <router-outlet> which is a sibling to the primary <router-outlet>.
+We can have any number of secondary <router-outlet> and each of this will be named uniquely.
+
+We never had to add any name to the child <router-outlet> inside the UserEditComponent because
+the router could determine whether to place the route in the primary <router-outlet> or
+child <router-outlet> based on route heirarchy.
+
+Secondary <router-outlet> will be placed at the same level as primary <router-outlet> so
+it is necessary to name them.
+
+Secondary routes are configured very similar to primary routes. But the difference is in addition to
+path and component, there will be another property outlet which will mention the name of the
+secondary outlet.
+
+  <router-outlet name="popup"></router-outlet>
+
+{
+    path:'message',
+    component:MessageComponent,
+  }
+
+Secondary route url will look like: localhost:4200/user(popup:message)
+
+user is the primary route path.
+(popup:message) is the secondary route path. In this path the format is outlet-name:path-name
+
+Activating Secondary route using routerLink.
+
+          <a class="nav-link" [routerLink]="[{outlets:{popup:['message']}}]" routerLinkActive="active">Messages</a>
+
+Activating Secondary route using navigate.
+
+this.router.navigate([{outlets:{popup:['message']}}])
+
+Clearing Secondary Outlet
+
+this.router.navigate([{outlets:{popup:null}}])
+[routerLink]="[{outlets:{popup:null}}]"
+
+------------------------------------------------------------------------------------
+Route Guards
+1. canActivate: Guard activation to a route
+2. canActivateChild: Guard activation to a child route
+3. canDeactivate:Guard navigation from a route
+4. canLoad: prevents async routing
+5. resolve: prefetch data before activating a route
+
+canDeactivate ----> canLoad ---> canActivateChild ---> canActivate ---->resolve
+
+A guard is build as an angular service which implements an interface based on the guard type
+
+canActivate guard will not re-execute if only the child route has changed.
+canActivateChild guard will re-execute only if the child route changes.
+canDeactivate guard will execute when we navigate to a different route within the same app and
+not when the browser is closed/we navigate away from the application.
+
+Lets say I want to navigate to the users page but i am not logged in.
+So the guard redirects me to the login page. On login, I want to be redirected to the users
+page only and not some default page. How do we share this info with the guard? Using Services.
+Create a property redirectUrl in the Service.
+
+In the guard, using the url property of the RouterStateSnapshot ,you can set the value of redirectUrl in
+the service.
+
+Once you successfully login, if the redirectUrl property has a value then it will redirect you to that
+url. It will have no value in case you directly go to the login page.

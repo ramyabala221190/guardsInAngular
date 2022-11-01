@@ -16,8 +16,19 @@ export class UsersService {
     email:""
   }]
 
+  hasLoggedIn:boolean=false;
+  redirectUrl:string="";
+
   getUsers(){
 return this.http.get("https://jsonplaceholder.typicode.com/users").pipe(catchError(err=>throwError(err)))
+  }
+
+  login(){
+    this.hasLoggedIn=true;
+  }
+
+  getLogInStatus(){
+    return this.hasLoggedIn;
   }
 
   getUser(userId:number){

@@ -11,7 +11,7 @@
 
   <button [disabled]="!userEditForm.valid" class="btn btn-success" *ngIf="userId !==0" (click)="editUser()">Update</button>
   <button [disabled]="!userEditForm.valid" class="btn btn-success" *ngIf="userId ===0" (click)="createUser()">Create</button>
-  <button class="btn btn-light" [routerLink]="['/']">Back</button>
+  <button class="btn btn-light" [routerLink]="['/user']">Back</button>
 
   <!--
     When you are in this component the url will be localhost:4200/user/edit/10/info

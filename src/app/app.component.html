@@ -1,5 +1,16 @@
 <div class="container">
   <app-header></app-header>
   <span *ngIf="loading">Navigating .....</span>
-<router-outlet></router-outlet>
+<div class="row">
+<div class="col-md-10">
+  <router-outlet></router-outlet>
+  <!--primary router outlet-->
+</div>
+<div class="col-md-2">
+  <router-outlet name="popup"></router-outlet>
+  <!--
+    named secondary router outlet
+  -->
+</div>
+</div>
 </div>
