@@ -15,6 +15,11 @@ const routes:Routes=[
   {
     path:"list",
     canActivate:[RouteDeactiveGuard],
+    /*this is used in case of a scenario when the user logs off
+    and wants to log in again. The canLoad guard wont re-execute. The feature module is already downloaded.
+    So we just add the can Activate guard to guard the child routes if the user logs in after a log off.
+    But the first time the feature module will load, the canLoad guard will execute.
+    */
     children:[
       {
         path:"",

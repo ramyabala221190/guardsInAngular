@@ -353,3 +353,102 @@ the service.
 
 Once you successfully login, if the redirectUrl property has a value then it will redirect you to that
 url. It will have no value in case you directly go to the login page.
+
+------------------------------------------------------------------------------------------
+
+Lazy loading
+
+When the broweser sends a request to the web server, the web server sends back the index.html file.
+In case of lazy loading, only the eagerly loaded files are downloaded and the lazily loaded files
+are downloaded only on demand. This improves the starting time of the application.
+
+Lazy loading affects how angular builds and serves our files.
+
+When we serve our files using ng serve --prod, the sizes of the main.js and other files reduces
+by many times as compared to ng serve.
+This is because in --prod, angular uses AOT compiler. This compiler converts our angular template html and component TS code in JS as a part of the build process. This enables faster rendering in the browser. This also prevents the need to include the compiler in the bundle. The angular libraries
+we do need are in the main.js file.
+
+Lazy loading reduces the size of main.js so that our start up time is less. We split our
+appln into features so that our main bundle contains only the startup code.
+The lazily loaded code will be loaded on demand or downloaded asynchronously in the background after
+our first page is displayed.
+
+Preparing for lazy loading:
+1.Use a feature module.
+2. Routes grouped under a single parent
+3. Feature module is not imported in any other angular module.
+
+A canLoad guard is used for lazy loaded modules to ensure that the module will not even be downloaded
+unless the criteria is met.
+
+--------------------------------------------------------------
+Preloading Feature Modules
+
+Steps in absence of preloading:
+Launch Application
+Download imported modules
+Template appears
+Navigate to lazy loaded path
+Download lazy loaded module
+Template appears
+
+The purpose of preloading to avoid the waiting time involved in downloading the lazy loaded module
+when demanded.
+Preloading is also called "eager lazy loading". Here the featue modules will be downloaded async in
+the background when the user is interacting with the application.
+Preloading is useful for modules that will be often used and not for modules that will hardly be used.
+
+Steps in presence of preloading:
+Launch Application
+Download imported modules
+Template appears
+Preload any featue modules in the background if preloading is enabled
+Navigate to lazy loaded path
+Template appears immediately without any waiting time
+-----------------------------------------------------------------------
+Preloading Strategies
+
+1. No Preloading.Lazy Feature modules are loaded on demand.
+2. Preload all lazy feature modules
+3. Custom to define which modules will preload and when they will preload
+
+Strategy 1 is the default strategy.
+
+For Strategy 2, you need to configure it as below by adding preloadingStrategy:PreloadAllModules
+
+RouterModule.forRoot(routes,
+    {enableTracing:true,preloadingStrategy:PreloadAllModules}
+    )
+
+What blocks the preloading of lazy feature modules ? canLoad guard !!!
+If you want to guard the feature module and also preload it, then go for canActivate guard instead
+of canLoad guard because canLoad guard will not allow the lazy feature module to be loaded unless
+criteria is met.
+
+Custom Preload Strategy
+
+1. Create a service which implements the PreloadingStrategy
+2. The preload() which the interface requires to be defined will be as below
+
+preload(route: Route, fn: () => Observable<any>): Observable<any> {
+    if(route.data && route.data['preload']){
+      //preload the lazy feature module only if the route has a data property as below:
+      // data:{preload:true}
+      return fn();
+    }
+    return of(null)
+  }
+
+3. Only those routes which have a data property and the data property is defined as {preload:true}
+will be preloaded.
+
+4. Enable the strategy as below. CustomPreloadStrategy is the service which we created earlier.
+[RouterModule.forRoot(routes,
+    {enableTracing:true,preloadingStrategy:CustomPreloadStrategy}
+    )
+
+
+
+
+
