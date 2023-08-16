@@ -1,4 +1,25 @@
+As you know, an Angular application is a tree of components. Some of these components are reusable UI components (for example, list and table), and some are application components, which represent screens or some logical parts of the application. The router cares about application components, or, to be more specific, about their arrangements. Let's call such component arrangements router states. So a router state defines what is visible on the screen.A router state is an arrangement of application components that defines what is visible on the screen.
 
+The router configuration defines all the potential router states of the application.A router state is a subtree of the configuration tree.The router's primary job is to manage navigation between router states, which includes updating the component tree.
+
+ In a well-behaved web application, any application state transition results in a URL change, and any URL change results in a state transition. In other words, a URL is nothing but a serialized router state. The Angular router takes care of managing the URL to make sure that it is always in-sync with the router state.
+
+ The Angular router takes a URL, then does the following:
+
+1. Applying redirects.
+
+2. Recognizing router states.
+
+3. Running guards and resolving data.
+
+4. Activating all the needed components.
+
+5. Managing navigation.
+
+When a component is activated, we say activated instead of instantiated as a component can be instantiated only once but activated multiple times (any time its route's parameters change):
+
+
+-------------------------------------------------------------------------------------------------------------------------------
 Sequence of events from navigating from route A to another route B:
 
 1. NavigationStart event for route B.
